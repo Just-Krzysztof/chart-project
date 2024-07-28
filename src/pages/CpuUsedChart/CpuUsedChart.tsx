@@ -1,5 +1,5 @@
 import { PureComponent } from "react";
-import { PieChart, Pie, Sector } from "recharts";
+import { PieChart, Pie, Sector, PieProps  } from "recharts";
 
 const data = [
   { name: "Group A", value: 400 },
@@ -8,7 +8,21 @@ const data = [
   { name: "Group D", value: 200 },
 ];
 
-const renderActiveShape = (props) => {
+interface ActiveShapeProps {
+  cx: number;
+  cy: number;
+  midAngle: number;
+  innerRadius: number;
+  outerRadius: number;
+  startAngle: number;
+  endAngle: number;
+  fill: string;
+  payload: { name: string };
+  percent: number;
+  value: number;
+}
+
+const renderActiveShape = (props: ActiveShapeProps) => {
   const RADIAN = Math.PI / 180;
   const {
     cx,
@@ -86,7 +100,7 @@ export default class CpuUsedChart extends PureComponent {
     activeIndex: 0,
   };
 
-  onPieEnter = (_, index) => {
+  onPieEnter = (_: React.MouseEvent, index: number) => {
     this.setState({
       activeIndex: index,
     });
@@ -97,7 +111,7 @@ export default class CpuUsedChart extends PureComponent {
       <PieChart width={400} height={400}>
         <Pie
           activeIndex={this.state.activeIndex}
-          activeShape={renderActiveShape}
+          activeShape={renderActiveShape as PieProps["activeShape"]}
           data={data}
           cx="50%"
           cy="50%"
